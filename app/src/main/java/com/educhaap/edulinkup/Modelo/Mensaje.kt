@@ -1,8 +1,12 @@
 package com.educhaap.edulinkup.Modelo
 
+
+
 data class Mensaje(
-val text: String ? = null,
-val sender: String ? = null,
-val timestamp: Long ? = null
+    val enviaUid: String ? = null,
+    val recibeUid: String ? = null,
+    val contenido: String ? = null,
+    val timestamp: Long? = System.currentTimeMillis(),
+    val leido: Boolean = false // Nuevo campo para rastrear el estado de lectura
 )
 

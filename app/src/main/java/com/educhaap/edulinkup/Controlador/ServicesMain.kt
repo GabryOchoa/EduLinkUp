@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.educhaap.edulinkup.Controlador
 
 import android.app.Activity
@@ -22,23 +24,25 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
+@Suppress("DEPRECATION")
 class ServicesMain(private val context: Context) {
 
     private lateinit var mGoogleSignInClient: GoogleSignInClient
-    private lateinit var auth:FirebaseAuth
-    private lateinit var db:FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
     private lateinit var adapter: AdaptadorUsuarios
-    private lateinit var chatList: MutableList<Usuario>
+    private lateinit var userList: MutableList<Usuario>
+
 
     //Metodo para cerrar sesion de usuario
-    fun signOutAndStartSignInActivity(){
+    private fun signOutAndStartSignInActivity() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(context.getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
 
         //pasando configuracion de google sign in
-        mGoogleSignInClient = GoogleSignIn.getClient(context,gso)
+        mGoogleSignInClient = GoogleSignIn.getClient(context, gso)
 
         auth.signOut()
         mGoogleSignInClient.signOut().addOnCompleteListener {
@@ -63,25 +67,28 @@ class ServicesMain(private val context: Context) {
                 Toast.makeText(context, "Nuevo Grupo seleccionado", Toast.LENGTH_SHORT).show()
                 true
             }
+
             R.id.action_profile -> {
                 Toast.makeText(context, "Perfil seleccionado", Toast.LENGTH_SHORT).show()
                 true
             }
+
             R.id.action_logout -> {
                 Toast.makeText(context, "Cerrar Sesión seleccionado", Toast.LENGTH_SHORT).show()
                 signOutAndStartSignInActivity()
                 true
             }
+
             else -> onOptionsItemSelected(item)
         }
     }
 
     //Metodos para mostrar datos al recycler view
     fun setupRecyclerView(recyclerView: RecyclerView) {
-        chatList = ArrayList()
+        userList = ArrayList()
         adapter = AdaptadorUsuarios(
             context = context,
-            chatList = chatList,
+            userList = userList,
             onUserClick = ::handleUserClick
         )
         db = FirebaseFirestore.getInstance()
@@ -95,11 +102,15 @@ class ServicesMain(private val context: Context) {
     private fun handleUserClick(user: Usuario) {
         val intent = Intent(context, ChatActivity::class.java)
         intent.putExtra("name", user.name)
-        intent.putExtra("uid",user.uid)
+        intent.putExtra("uid", user.uid)
         context.startActivity(intent)
         if (context is Activity) {
             context.finish()
         }
+        //Rest de contador de mensajes no leidos
+        user.mensajeNoLeido = 0
+        db.collection("usuarios").document(user.uid!!).update("mensajeNoLeido", 0)
+        adapter.notifyDataSetChanged()
     }
 
     private fun loadChatData() {
@@ -111,20 +122,25 @@ class ServicesMain(private val context: Context) {
         if (currentUserId != null) {
             db.collection("usuarios").get()
                 .addOnSuccessListener { documents ->
-                    chatList.clear()
+                    userList.clear()
                     for (document in documents) {
                         val user = document.toObject(Usuario::class.java)
                         if (user.uid != currentUserId) {
-                            chatList.add(user)
+                            userList.add(user)
                         }
                     }
                     adapter.notifyDataSetChanged()
                 }
                 .addOnFailureListener { exception ->
-                    Toast.makeText(context, "Error al cargar usuarios: ${exception.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Error al cargar usuarios: ${exception.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
         } else {
             Toast.makeText(context, "Usuario no autenticado", Toast.LENGTH_SHORT).show()
         }
     }
+
 }

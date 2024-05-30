@@ -37,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="UserName"
+            android:textSize="20sp"
             android:textColor="@color/white"/>
     </androidx.appcompat.widget.Toolbar>
 
@@ -61,26 +62,32 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
+            android:gravity="center"
             android:background="@color/md_cyan_100">
 
             <EditText
-                android:background="@color/md_cyan_100"
                 android:id="@+id/etMensaje"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/rounded_edittext"
                 android:hint="Escribe tu mensaje aquí"
                 android:inputType="textMultiLine"
                 android:maxLines="4"
-                android:textStyle="bold"/>
+                android:padding="10dp"
+                android:layout_margin="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/md_cyan_900"
+                android:textColorHint="@color/md_cyan_900"/>
 
-            <androidx.appcompat.widget.AppCompatButton
+            <ImageButton
                 android:id="@+id/btnEnviar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_button"
-                android:textColor="@color/white"
-                android:text="Enviar" />
+                android:layout_margin="10dp"
+                android:background="@null"
+                android:src="@drawable/ic_enviar"
+                android:contentDescription="Enviar mensaje" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

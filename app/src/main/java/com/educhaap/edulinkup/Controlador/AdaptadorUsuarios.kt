@@ -9,10 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.educhaap.edulinkup.Modelo.Usuario
 import com.educhaap.edulinkup.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class AdaptadorUsuarios(
     private val context: Context,
-    private val chatList: List<Usuario>,
+    private val userList: List<Usuario>,
     private val onUserClick: (Usuario) -> Unit
 ):RecyclerView.Adapter<AdaptadorUsuarios.UserViewHolder>() {
 
@@ -21,11 +23,12 @@ class AdaptadorUsuarios(
         return UserViewHolder(view)
     }
 
-    override fun getItemCount(): Int =  chatList.size
+    override fun getItemCount(): Int =  userList.size
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        val user = chatList[position]
+        val user = userList[position]
         holder.bind(user,onUserClick)
+
     }
 
     class UserViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
@@ -35,16 +38,9 @@ class AdaptadorUsuarios(
 
         fun bind(user: Usuario, onUserClick: (Usuario) -> Unit) {
             chatName.text = user.name
-            chatUltimoMensaje.text = user.ultimoMensaje
+            chatUltimoMensaje.text = user.ultimoMensaje ?: "No hay mensajes"
 
-            if(user.mensajeNoLeido > 0){
-                mensajeNoLeido.text = user.mensajeNoLeido.toString()
-                mensajeNoLeido.visibility = View.VISIBLE
-                itemView.setBackgroundColor(Color.LTGRAY)
-            }else{
-                mensajeNoLeido.visibility = View.GONE
-                itemView.setBackgroundColor(Color.TRANSPARENT)
-            }
+            mensajeNoLeido.visibility = if (user.mensajeNoLeido > 0) View.VISIBLE else View.GONE
 
             itemView.setOnClickListener {
                 onUserClick(user)

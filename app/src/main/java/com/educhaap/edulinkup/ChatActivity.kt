@@ -7,16 +7,19 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.educhaap.edulinkup.Controlador.AdaptadorMensajes
 import com.educhaap.edulinkup.Controlador.ServicesChat
-import com.educhaap.edulinkup.Controlador.ServicesMain
+import com.educhaap.edulinkup.Modelo.Mensaje
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ListenerRegistration
 
 class ChatActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var tvName:TextView
     private lateinit var mensaje: EditText
-    private lateinit var btnEnviar: AppCompatButton
+    private lateinit var btnEnviar: ImageButton
     private lateinit var recyclerViewChat: RecyclerView
     private lateinit var servicesChat: ServicesChat
     private lateinit var btnRegresar: ImageButton
@@ -27,7 +30,7 @@ class ChatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chat)
         initComponets()
         initChatService()
-}
+    }
 
     //Inicializar componentes
     private fun initComponets(){
@@ -45,8 +48,9 @@ class ChatActivity : AppCompatActivity() {
         servicesChat.setupRecyclerViewChat(recyclerViewChat)
 
         val name = intent.getStringExtra("name")
+        val receiveUid = intent.getStringExtra("uid")
 
-        servicesChat.listarMensaje()
+        servicesChat.listarMensaje(receiveUid!!)
         supportActionBar?.title = name
         tvName.text = name
 
@@ -60,10 +64,8 @@ class ChatActivity : AppCompatActivity() {
         btnEnviar.setOnClickListener {
             val mensajeTexto = mensaje.text.toString()
             val currentTime = System.currentTimeMillis()
-            servicesChat.enviarMensaje(mensajeTexto,currentTime)
+            servicesChat.enviarMensaje(mensajeTexto,receiveUid,currentTime)
             mensaje.setText("")
         }
     }
-
-
 }

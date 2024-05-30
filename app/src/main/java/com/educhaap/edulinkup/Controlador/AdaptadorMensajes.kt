@@ -37,11 +37,11 @@ class AdaptadorMensajes(private val mensajeList:MutableList<Mensaje>): RecyclerV
         val currentMessage = mensajeList[position]
 
         if(holder is SentViewHolder){
-            holder.enviarMensaje.text = currentMessage.text
+            holder.enviarMensaje.text = currentMessage.contenido
             holder.timestamp.text = currentMessage.timestamp?.let { formatTimesTamp(it) }
 
         } else if (holder is ReceiveViewHolder) {
-            holder.recibirMensaje.text = currentMessage.text
+            holder.recibirMensaje.text = currentMessage.contenido
             holder.timestamp.text = currentMessage.timestamp?.let { formatTimesTamp(it) }
         }
     }
@@ -49,7 +49,7 @@ class AdaptadorMensajes(private val mensajeList:MutableList<Mensaje>): RecyclerV
     override fun getItemViewType(position: Int): Int {
         val user = FirebaseAuth.getInstance()
         val currentMensaje = mensajeList[position]
-        if(user.currentUser?.uid.equals(currentMensaje.sender)){
+        if(user.currentUser?.uid.equals(currentMensaje.enviaUid)){
             return ITEM_SENT
         }else{
             return ITEM_RECEIVE
