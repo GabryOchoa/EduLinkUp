@@ -13,6 +13,12 @@
         android:theme="@style/Theme.EduLinkUp"
         tools:targetApi="31">
         <activity
+            android:name=".NuevoAmigo"
+            android:exported="false" />
+        <activity
+            android:name=".MisAmigos"
+            android:exported="false" />
+        <activity
             android:name=".ChatActivity"
             android:exported="false" />
         <activity
@@ -27,6 +33,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+        <activity android:name=".Addtional_data" />
     </application>
 
 </manifest>
