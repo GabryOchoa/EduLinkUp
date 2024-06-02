@@ -27,7 +27,7 @@
             android:textColor="@android:color/black"
             android:textStyle="bold" />
 
-        <TextView
+        <!--<TextView
             android:id="@+id/chatUltimoMensaje"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
             android:textColor="@android:color/white"
             android:visibility="gone"
             android:layout_gravity="end"/>
-
+        -->
     </LinearLayout>
 
 </LinearLayout>

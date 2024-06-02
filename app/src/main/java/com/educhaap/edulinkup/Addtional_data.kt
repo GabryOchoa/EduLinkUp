@@ -222,6 +222,9 @@ class Addtional_data : AppCompatActivity()
             else
             {
                 //si todo esta bien redireccionamos a la funcion de guardar
+                //Creamos el nombre completo del usuario
+                name = primerNombre + " " + segundoNombre + " " + primerApellido + " " + segundoApellido
+                name = name.trim()
                 val AuthManager = AuthManager(this)
                 AuthManager.saveUserToFirestore(providerID, uid, email, name, primerNombre, segundoNombre, primerApellido, segundoApellido, selectedInstitucion.codigoInstitucion, selectedCarrera.codigoCarrera)
             }

@@ -33,14 +33,14 @@ class AdaptadorUsuarios(
 
     class UserViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         private val chatName = itemView.findViewById<TextView>(R.id.chatNombre)
-        private val chatUltimoMensaje = itemView.findViewById<TextView>(R.id.chatUltimoMensaje)
-        private val  mensajeNoLeido = itemView.findViewById<TextView>(R.id.tvMensajeNoLeido)
+        //private val chatUltimoMensaje = itemView.findViewById<TextView>(R.id.chatUltimoMensaje)
+        //private val  mensajeNoLeido = itemView.findViewById<TextView>(R.id.tvMensajeNoLeido)
 
         fun bind(user: Usuario, onUserClick: (Usuario) -> Unit) {
             chatName.text = user.name
-            chatUltimoMensaje.text = user.ultimoMensaje ?: "No hay mensajes"
+            //chatUltimoMensaje.text = user.ultimoMensaje ?: "No hay mensajes"
 
-            mensajeNoLeido.visibility = if (user.mensajeNoLeido > 0) View.VISIBLE else View.GONE
+            //mensajeNoLeido.visibility = if (user.mensajeNoLeido > 0) View.VISIBLE else View.GONE
 
             itemView.setOnClickListener {
                 onUserClick(user)

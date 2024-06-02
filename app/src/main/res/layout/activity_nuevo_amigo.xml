@@ -58,6 +58,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="54dp"
+            android:layout_margin="10dp"
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatButton
@@ -96,6 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:text="Agregar Amigos"
             android:textColor="@color/md_cyan_900"
             android:textSize="24sp"
@@ -103,9 +105,10 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvAgregarAmigos"
-            android:layout_width="387dp"
+            android:layout_width="match_parent"
             android:layout_height="370dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
             android:layout_marginRight="10dp">
 
         </androidx.recyclerview.widget.RecyclerView>

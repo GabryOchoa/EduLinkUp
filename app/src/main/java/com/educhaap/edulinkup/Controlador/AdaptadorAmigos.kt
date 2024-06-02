@@ -7,14 +7,19 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.educhaap.edulinkup.Modelo.Usuario
+import com.educhaap.edulinkup.NuevoAmigo
 import com.educhaap.edulinkup.R
 
-class AdaptadorAmigos(private val usuarios: List<Usuario>): RecyclerView.Adapter<AdaptadorAmigos.AmigoViewHolder>(){
+class AdaptadorAmigos(val uidUsuario: String, val correoUsuario:String, private val context: Context, private var usuarios: MutableList<Usuario>): RecyclerView.Adapter<AdaptadorAmigos.AmigoViewHolder>(){
 
     // ViewHolder para el RecyclerView
     class AmigoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textViewNombre: TextView = itemView.findViewById(R.id.edtNombre)
         val textViewEmail: TextView = itemView.findViewById(R.id.edtEmail)
+        val textViewInstitucion: TextView = itemView.findViewById(R.id.tvInstitucion)
+        val textViewCarrera: TextView = itemView.findViewById(R.id.tvCarrera)
+        val buttomViewAgregarAmigo: TextView = itemView.findViewById(R.id.btnAgregarAmigo)
+        var uidUsuarioSeleccionado : String? = ""
     }
     // Método que infla el diseño de los ítems y crea un ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AmigoViewHolder {
@@ -27,9 +32,27 @@ class AdaptadorAmigos(private val usuarios: List<Usuario>): RecyclerView.Adapter
         val amigo = usuarios[position]
         holder.textViewNombre.text = amigo.name
         holder.textViewEmail.text = amigo.email
+        holder.uidUsuarioSeleccionado = amigo.uid
+
+        //Creamos un evento al boton del recyclerView
+        holder.buttomViewAgregarAmigo.setOnClickListener {
+            val nombreAmigo = holder.textViewNombre.text.toString()
+            val correoAmigo = holder.textViewEmail.text.toString()
+            var NuevoAmigo = NuevoAmigo()
+            NuevoAmigo.insertAmigo(uidUsuario, correoUsuario, context,nombreAmigo, correoAmigo, amigo.uid)
+
+            //Limpiamos el recycler
+            clear()
+        }
     }
 
     // Método que devuelve la cantidad de ítems en la lista
     override fun getItemCount() = usuarios.size
+
+    // Método para limpiar el RecyclerView
+    fun clear() {
+        usuarios.clear()
+        notifyDataSetChanged()
+    }
 }
 
