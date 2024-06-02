@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.educhaap.edulinkup.ChatActivity
+import com.educhaap.edulinkup.Modelo.Amigos
 import com.educhaap.edulinkup.Modelo.Usuario
 import com.educhaap.edulinkup.R
 import com.educhaap.edulinkup.SignInActivity
@@ -30,8 +31,8 @@ class ServicesMain(private val context: Context) {
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
-    private lateinit var adapter: AdaptadorUsuarios
-    private lateinit var userList: MutableList<Usuario>
+    private lateinit var adapter: AdaptadorChats
+    private lateinit var userList: MutableList<Amigos>
 
 
     //Metodo para cerrar sesion de usuario
@@ -86,9 +87,9 @@ class ServicesMain(private val context: Context) {
     //Metodos para mostrar datos al recycler view
     fun setupRecyclerView(recyclerView: RecyclerView) {
         userList = ArrayList()
-        adapter = AdaptadorUsuarios(
+        adapter = AdaptadorChats(
             context = context,
-            userList = userList,
+            amigosUsuario = userList,
             onUserClick = ::handleUserClick
         )
         db = FirebaseFirestore.getInstance()
@@ -99,17 +100,17 @@ class ServicesMain(private val context: Context) {
         loadChatData()
     }
 
-    private fun handleUserClick(user: Usuario) {
+    private fun handleUserClick(amigo: Amigos) {
         val intent = Intent(context, ChatActivity::class.java)
-        intent.putExtra("name", user.name)
-        intent.putExtra("uid", user.uid)
+        intent.putExtra("name", amigo.nameAmigo)
+        intent.putExtra("uid", amigo.uidAmigo)
         context.startActivity(intent)
         if (context is Activity) {
             context.finish()
         }
         //Rest de contador de mensajes no leidos
-        user.mensajeNoLeido = 0
-        db.collection("usuarios").document(user.uid!!).update("mensajeNoLeido", 0)
+        //amigo.mensajeNoLeido = 0
+        //db.collection("usuarios").document(user.uid!!).update("mensajeNoLeido", 0)
         adapter.notifyDataSetChanged()
     }
 
@@ -120,12 +121,17 @@ class ServicesMain(private val context: Context) {
         val currentUserId = auth.currentUser?.uid
 
         if (currentUserId != null) {
-            db.collection("usuarios").get()
+            db.collection("amigos")
+                .whereEqualTo("uidUsuario",currentUserId)
+                .get()
                 .addOnSuccessListener { documents ->
                     userList.clear()
                     for (document in documents) {
-                        val user = document.toObject(Usuario::class.java)
-                        if (user.uid != currentUserId) {
+                        //val user = document.toObject(Amigos::class.java)
+                        var uidAmigo = document.getString("uidAmigo")
+                        var nombreAmigo = document.getString("nameAmigo")
+                        if (uidAmigo != null && nombreAmigo != null && uidAmigo != currentUserId) {
+                            var user = Amigos("",nombreAmigo,uidAmigo,"","","","","")
                             userList.add(user)
                         }
                     }
