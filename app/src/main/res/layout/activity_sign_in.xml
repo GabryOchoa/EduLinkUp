@@ -11,73 +11,89 @@
         android:id="@+id/linear1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="#FFFFFF"
         android:orientation="vertical"
-        android:background="@color/md_cyan_50"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" >
-
-        <TextView
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:text="EduLinkUp"
-            android:textColor="@color/md_cyan_900"
-            android:textSize="40dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="20dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:layout_margin="30dp"
             android:layout_gravity="center"
+            android:layout_margin="30dp"
             android:scaleType="fitCenter"
-            android:src="@mipmap/ic_logo_principal"
-            />
+            android:src="@drawable/edulinkup_logo" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Iniciar con"
-            android:textSize="20dp"
             android:layout_gravity="center"
-            android:textColor="@color/md_cyan_900"
-            android:layout_marginTop="100dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Iniciar con"
+            android:textColor="#000000"
+            android:textSize="20dp" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="3dp"
+            android:layout_height="1dp"
             android:layout_margin="10dp"
-            android:background="@color/md_light_blue_900"/>
+            android:background="@color/black" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/btnGoogle"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="GOOGLE"
-            android:textColor="@color/white"
-            android:background="@drawable/background_gradient"
-            android:textAlignment="textStart"
-            android:drawableStart="@drawable/google"
-            android:paddingLeft="16dp"
-            android:drawablePadding="8dp"
-            android:layout_margin="10dp"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:backgroundTint="#D9D9D9"
+            android:drawableLeft="@drawable/google"
+            android:text="Iniciar con Google"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            app:cornerRadius="10dp" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/btnMicrosoft"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="MICROSOFT"
-            android:background="@drawable/background_gradient"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:backgroundTint="#D9D9D9"
+            android:drawableLeft="@drawable/microsoft"
+            android:textColor="#000000"
+            android:text="Iniciar con Microsoft"
+            android:textAlignment="center"
+            app:cornerRadius="10dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="10dp"
+            android:background="@color/black" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="1dp"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:text="O" />
+
+        <Button
+            android:id="@+id/btnIniciarSesion_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:backgroundTint="#3F88DD"
+            android:onClick="redireccionarTipoUsuario"
+            android:text="Iniciar Sesión"
+            android:textAlignment="center"
             android:textColor="@color/white"
-            android:textAlignment="textStart"
-            android:drawableStart="@drawable/microsoft"
-            android:paddingLeft="16dp"
-            android:drawablePadding="8dp"
-            android:layout_margin="10dp"/>
+            app:cornerRadius="10dp" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

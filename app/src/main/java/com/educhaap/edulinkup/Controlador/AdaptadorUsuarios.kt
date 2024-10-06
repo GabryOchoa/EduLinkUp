@@ -37,7 +37,7 @@ class AdaptadorUsuarios(
         //private val  mensajeNoLeido = itemView.findViewById<TextView>(R.id.tvMensajeNoLeido)
 
         fun bind(user: Usuario, onUserClick: (Usuario) -> Unit) {
-            chatName.text = user.name
+            chatName.text = user.nombreCompleto
             //chatUltimoMensaje.text = user.ultimoMensaje ?: "No hay mensajes"
 
             //mensajeNoLeido.visibility = if (user.mensajeNoLeido > 0) View.VISIBLE else View.GONE

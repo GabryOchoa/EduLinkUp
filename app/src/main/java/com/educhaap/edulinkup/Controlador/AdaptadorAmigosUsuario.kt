@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.educhaap.edulinkup.ChatActivity
 import com.educhaap.edulinkup.Modelo.Amigos
+import com.educhaap.edulinkup.Modelo.Institucion
 import com.educhaap.edulinkup.Modelo.Usuario
 import com.educhaap.edulinkup.NuevoAmigo
 import com.educhaap.edulinkup.R
@@ -38,6 +39,8 @@ class AdaptadorAmigosUsuario(private val context: Context, private var amigosUsu
         holder.textViewNombre.text = amigo.nameAmigo
         holder.textViewEmail.text = amigo.correoAmigo
         holder.txtUidAmigo = amigo.uidAmigo
+        holder.textViewInstitucion.text = amigo.institucionAmigo
+        holder.textViewCarrera.text = amigo.carreraAmigo
 
         //Creamos un evento al boton del recyclerView
         holder.buttomViewVerChat.setOnClickListener {

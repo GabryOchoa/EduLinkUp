@@ -8,8 +8,11 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import com.educhaap.edulinkup.Addtional_data
 import com.educhaap.edulinkup.MainActivity
+import com.educhaap.edulinkup.Modelo.Carrera
+import com.educhaap.edulinkup.Modelo.Institucion
 import com.educhaap.edulinkup.Modelo.Usuario
 import com.educhaap.edulinkup.R
+import com.educhaap.edulinkup.UserType
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -53,10 +56,12 @@ class AuthManager(private val activity: Activity) {
                     val name = account.displayName
                     if (email != null && idToken != null && name != null) {
                         firebaseAuthWithGoogle(idToken, email, name)
-                    } else {
+                    }
+                    else {
                         handleError("Google sign in failed: Missing data")
                     }
-                } else {
+                }
+                else {
                     handleError("Google sign in failed: Account is null")
                 }
             } catch (e: ApiException) {
@@ -91,25 +96,33 @@ class AuthManager(private val activity: Activity) {
                             if (usuario != null)
                             {
                                 //Validamos si el usuario tiene su informacion completa
-                                var codigoInstitucion : Int = usuario.codigoInstitucion
-                                var codigoCarrera : Int = usuario.codigoCarrera
+                                var institucion : Institucion? = usuario.institucion
+                                var carrera : Carrera? = usuario.carrera
                                 var primerNombre : String? = usuario.firstName
                                 var segundoNombre : String? = usuario.secondName
                                 var primerApellido : String? = usuario.firstLastName
                                 var segundoApellido : String? = usuario.secondLastName
 
-                                if(codigoCarrera == 0 || codigoInstitucion == 0 || primerNombre == null || segundoNombre == null || primerApellido == null || segundoApellido == null)
+                                if(carrera != null && institucion != null)
                                 {
-                                    startAddtionalDataActivity(activity,email, name, uid, providerId)
+                                    if(carrera.nombreCarrera == null || institucion.nombreInstitucion == null || primerNombre == null || segundoNombre == null || primerApellido == null || segundoApellido == null)
+                                    {
+                                        startUserTypeActvity(activity,email, uid, providerId)
+                                    }
+                                    else //sino lo mandamos al main de un solo
+                                    {
+                                        startMainActivity(activity,email, name)
+                                    }
                                 }
-                                else //sino lo mandamos al main de un solo
+                                else
                                 {
-                                    startMainActivity(activity,email, name)
+                                    startUserTypeActvity(activity,email, uid, providerId)
                                 }
+
                             }
                             else //si el usuario no existe lo mandamos a registrarse
                             {
-                                startAddtionalDataActivity(activity,email, name, uid, providerId)
+                                startUserTypeActvity(activity,email, uid, providerId)
                                 //handleError("usuario no encontrado error en firebaseAuthWithGoogle")
                             }
                         }
@@ -187,25 +200,32 @@ class AuthManager(private val activity: Activity) {
                                 if (usuario != null)
                                 {
                                     //Validamos si el usuario tiene su informacion completa
-                                    var codigoInstitucion : Int = usuario.codigoInstitucion
-                                    var codigoCarrera : Int = usuario.codigoCarrera
+                                    var institucion : Institucion? = usuario.institucion
+                                    var carrera : Carrera? = usuario.carrera
                                     var primerNombre : String? = usuario.firstName
                                     var segundoNombre : String? = usuario.secondName
                                     var primerApellido : String? = usuario.firstLastName
                                     var segundoApellido : String? = usuario.secondLastName
 
-                                    if(codigoCarrera == 0 || codigoInstitucion == 0 || primerNombre == null || segundoNombre == null || primerApellido == null || segundoApellido == null)
+                                    if(carrera != null && institucion != null)
                                     {
-                                        startAddtionalDataActivity(activity,email, name, uid, providerId)
+                                        if(carrera.nombreCarrera == null || institucion.nombreInstitucion == null || primerNombre == null || segundoNombre == null || primerApellido == null || segundoApellido == null)
+                                        {
+                                            startUserTypeActvity(activity,email, uid, providerId)
+                                        }
+                                        else //sino lo mandamos al main de un solo
+                                        {
+                                            startMainActivity(activity,email, name)
+                                        }
                                     }
-                                    else //sino lo mandamos al main de un solo
+                                    else
                                     {
-                                        startMainActivity(activity,email, name)
+                                        startUserTypeActvity(activity,email, uid, providerId)
                                     }
                                 }
                                 else //si el usuario no existe lo mandamos a registrarse
                                 {
-                                    startAddtionalDataActivity(activity,email, name, uid, providerId)
+                                    startUserTypeActvity(activity,email, uid, providerId)
                                     //handleError("usuario no encontrado error en firebaseAuthWithMicrosoft")
                                 }
                             }
@@ -225,10 +245,10 @@ class AuthManager(private val activity: Activity) {
     }
 
     //Metodo para guardar datos de usuario en la base de datos
-    public fun saveUserToFirestore(providerId : String, uid: String, email: String, name: String, primerNombre: String, segundoNombre: String, primerApellido: String, segundoApellido: String, institucion: Int, carrera: Int) {
+    public fun saveUserToFirestore(providerId : String, uid: String, email: String, rol : String?, name: String, primerNombre: String, segundoNombre: String, primerApellido: String, segundoApellido: String, institucion: Institucion, carrera: Carrera) {
         try {
 
-            val usuario = Usuario(uid,email,name,providerId, primerNombre, segundoNombre, primerApellido, segundoApellido, institucion, carrera)
+            val usuario = Usuario(uid,email,rol,name,providerId, primerNombre, segundoNombre, primerApellido, segundoApellido, institucion, carrera)
             db.collection("usuarios").document(uid)
                 .set(usuario)
                 .addOnCompleteListener {
@@ -277,7 +297,7 @@ class AuthManager(private val activity: Activity) {
     }
 
     //Metodo que redirecciona a la actividad de datos adicionales
-    private fun startAddtionalDataActivity(context: Context, email: String, name: String, uid: String, user: String) {
+    /*private fun startAddtionalDataActivity(context: Context, email: String, name: String, uid: String, user: String) {
         try
         {
             val intent = Intent(context, Addtional_data::class.java).apply {
@@ -296,31 +316,61 @@ class AuthManager(private val activity: Activity) {
         {
             Log.e("AuthManager","Error en startAddtionalDataActivity: "+ex.message)
         }
-    }
+    }*/
 
+    //Metodo que redirecciona a la activity de tipo de usuario
+    private fun startUserTypeActvity(context: Context, email: String, uid: String, provider: String)
+    {
+        try
+        {
+            val intent = Intent(context, UserType::class.java).apply {
+                putExtra("EXTRA_EMAIL",email)
+                putExtra("EXTRA_UID",uid)
+                putExtra("EXTRA_PROVIDER_ID",provider)
+
+            }
+            context.startActivity(intent)
+            if(context is Activity){
+                context.finish()
+            }
+        }
+        catch(ex : Exception)
+        {
+            Log.e("AuthManager","Error en startUserTypeActvity: "+ex.message)
+        }
+
+    }
     //Metodo para buscar usuario por correo y retorna por medio de un callback el usuario
     private fun getUserByEmail(email : String, callback: (Usuario?) -> Unit)
     {
-        db.collection("usuarios")
-            .whereEqualTo("email",email)
-            .get()
-            .addOnSuccessListener { resultado ->
-                if(!resultado.isEmpty)
-                {
-                    val documento = resultado.documents[0]
-                    val usuario = documento.toObject(Usuario::class.java)
-                    //DEVOLVEMOS AL USUARIO
-                    callback(usuario)
+        try
+        {
+            db.collection("usuarios")
+                .whereEqualTo("email",email)
+                .get()
+                .addOnSuccessListener { resultado ->
+                    if(!resultado.isEmpty)
+                    {
+                        val documento = resultado.documents[0]
+                        val usuario = documento.toObject(Usuario::class.java)
+                        //DEVOLVEMOS AL USUARIO
+                        callback(usuario)
+                    }
+                    else
+                    {
+                        callback(null) // No se encontró el usuario
+                    }
                 }
-                else
-                {
-                    callback(null) // No se encontró el usuario
+                .addOnFailureListener{exception ->
+                    Log.w("AuthManager", "Error al consultar el usuario por correo", exception)
+                    callback(null) // En caso de error, devolver nul
                 }
-            }
-            .addOnFailureListener{exception ->
-                Log.w("AuthManager", "Error al consultar el usuario por correo", exception)
-                callback(null) // En caso de error, devolver nul
-            }
+        }
+        catch(ex:Exception)
+        {
+            Log.e("AuthManager", "Error al consultar el usuario por correo", ex)
+        }
+
     }
 
     //Metodo para manejar errores
