@@ -3,16 +3,17 @@ package com.educhaap.edulinkup
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.View
+import android.widget.Button
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.content.ContextCompat.startActivity
 import com.educhaap.edulinkup.Controlador.AuthManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class SignInActivity : AppCompatActivity() {
-    private lateinit var btnGooble: AppCompatButton
-    private lateinit var btnMicrososf: AppCompatButton
+    private lateinit var btnGooble: Button
+    private lateinit var btnMicrososf: Button
+    private lateinit var btnIniciarSesion_login : Button
     private lateinit var auth: FirebaseAuth
     private lateinit var authManager: AuthManager
     private lateinit var db: FirebaseFirestore
@@ -33,6 +34,8 @@ class SignInActivity : AppCompatActivity() {
             authManager.signInMicrosoft()
         }
 
+        btnIniciarSesion_login = findViewById(R.id.btnIniciarSesion_login)
+
     }
 
     //Metodo inicia el activity y trae resultados
@@ -51,4 +54,10 @@ class SignInActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
     }
 
+    //Metodo que redirecciona al tipo de usuario
+    fun redireccionarTipoUsuario(V: View)
+    {
+        val intent = Intent(this, UserType::class.java)
+        startActivity(intent)
+    }
 }

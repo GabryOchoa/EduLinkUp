@@ -79,9 +79,11 @@ class MisAmigos : AppCompatActivity() {
                         var NombreAmigo = registro.getString("nameAmigo")
                         var uidAmigo = registro.getString("uidAmigo")
                         var correoAmigo = registro.getString("correoAmigo")
+                        var nombreCarreraAmigo = registro.getString("carreraAmigo")
+                        var nombreInstitucionAmigo = registro.getString("institucionAmigo")
 
-                        if (NombreAmigo != null && uidAmigo != null && correoAmigo != null) {
-                            amigosUsuarioList.add(Amigos(correoAmigo,NombreAmigo,uidAmigo,correoUsuario,"","","",""))
+                        if (NombreAmigo != null && uidAmigo != null && correoAmigo != null && nombreCarreraAmigo != null && nombreInstitucionAmigo != null) {
+                            amigosUsuarioList.add(Amigos(correoAmigo,NombreAmigo,uidAmigo,correoUsuario,"","",nombreCarreraAmigo,nombreInstitucionAmigo))
 
                             contadorAmigosEncontrados = amigosUsuarioList.count()
 

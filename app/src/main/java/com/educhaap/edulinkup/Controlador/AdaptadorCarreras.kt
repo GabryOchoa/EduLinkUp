@@ -18,7 +18,7 @@ class AdaptadorCarreras (contex : Context, private val carreras: List<Carrera>) 
         // Reutilizar la vista si es posible, de lo contrario inflar una nueva
         val view = convertView ?: LayoutInflater.from(context).inflate(resource, parent, false)
         // Obtener referencia al TextView dentro de la vista
-        val textView = view.findViewById<TextView>(R.id.spinnerTextView)
+        val textView = view.findViewById<TextView>(R.id.spinnerTextViewCustom)
         // Establecer el texto del TextView con el nombre de la institución
         textView.text = carreras[position].nombreCarrera
         return view
@@ -27,12 +27,12 @@ class AdaptadorCarreras (contex : Context, private val carreras: List<Carrera>) 
     // Método para obtener la vista que se mostrará cuando el Spinner no esté desplegado
     //Este metodo esta sobre escrito para que tome su nueva fuente de datos y nuevo estilo de spinner
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        return createViewFromResource(position, convertView, parent, R.layout.spinner_item)
+        return createViewFromResource(position, convertView, parent, R.layout.spinner_item_custom)
     }
 
     // Método para obtener la vista que se mostrará cuando el Spinner esté desplegado
     //Este metodo esta sobre escrito para que tome su nueva fuente de datos y nuevo estilo de spinner
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-        return createViewFromResource(position, convertView, parent, R.layout.spinner_item)
+        return createViewFromResource(position, convertView, parent, R.layout.spinner_dropdown_item_custom)
     }
 }

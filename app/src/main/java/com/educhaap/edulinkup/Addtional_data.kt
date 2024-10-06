@@ -1,5 +1,6 @@
 package com.educhaap.edulinkup
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -30,10 +31,9 @@ class Addtional_data : AppCompatActivity()
 
     //Datos del intent
     private lateinit var email : String
-    private lateinit var name : String
     private lateinit var uid : String
     private lateinit var providerID : String
-
+    private lateinit var rol : String
 
     //Instancia para firebase
     private val db = FirebaseFirestore.getInstance()
@@ -61,8 +61,8 @@ class Addtional_data : AppCompatActivity()
             //Validamos que no sean nulos con el operador Elvis
             providerID = intent.getStringExtra("EXTRA_PROVIDER_ID") ?: "Desconocido"
             email = intent.getStringExtra("EXTRA_EMAIL") ?: "Desconocido"
-            name = intent.getStringExtra("EXTRA_NAME") ?: "Desconocido"
             uid = intent.getStringExtra("EXTRA_UID") ?: "Desconocido"
+            rol = intent.getStringExtra("EXTRA_ROL") ?: "Desconocido"
 
             //Este metodo llena los spinneres
             getInstituciones()
@@ -185,23 +185,6 @@ class Addtional_data : AppCompatActivity()
             }
     }
 
-    //funcion de prueba con adapter personalizado
-    fun llenarInstituciones()
-    {
-        // Crear lista de objetos Institucion con codigoInstitucion como entero
-        val institucionesList = listOf(
-            Institucion(1, "Institucion A"),  // Crear un objeto Institucion
-            Institucion(2, "Institucion B"),
-            Institucion(3, "Institucion C")
-        )
-
-        // Crear el adaptador personalizado con la lista de instituciones
-        val adapter = AdaptadorInstituciones(this, institucionesList)
-
-        // Asignar el adaptador al Spinner
-        spInstituciones.adapter = adapter
-    }
-
     fun InsertarDatosAdicionales(v : View)
     {
         try
@@ -215,7 +198,7 @@ class Addtional_data : AppCompatActivity()
             var primerApellido = txtPrimerApellido.text.toString()
             var segundoApellido = txtSegundoApellido.text.toString()
 
-            if(selectedInstitucion == null || selectedCarrera == null || primerNombre == null || segundoNombre == null || primerApellido == null || segundoApellido == null)
+            if(selectedInstitucion == null || selectedCarrera == null || primerNombre == null || segundoNombre == null || primerApellido == null || segundoApellido == null || rol == null)
             {
                 Toast.makeText(this, "Llene todos los campos para poder continuar", Toast.LENGTH_SHORT).show()
             }
@@ -223,10 +206,9 @@ class Addtional_data : AppCompatActivity()
             {
                 //si todo esta bien redireccionamos a la funcion de guardar
                 //Creamos el nombre completo del usuario
-                name = primerNombre + " " + segundoNombre + " " + primerApellido + " " + segundoApellido
-                name = name.trim()
+                val nombreCompleto = primerNombre.trim() + " " + segundoNombre.trim() + " " + primerApellido.trim() + " " + segundoApellido.trim()
                 val AuthManager = AuthManager(this)
-                AuthManager.saveUserToFirestore(providerID, uid, email, name, primerNombre, segundoNombre, primerApellido, segundoApellido, selectedInstitucion.codigoInstitucion, selectedCarrera.codigoCarrera)
+                AuthManager.saveUserToFirestore(providerID, uid, email, rol, nombreCompleto, primerNombre, segundoNombre, primerApellido, segundoApellido, selectedInstitucion, selectedCarrera)
             }
         }
         catch(ex : Exception)
@@ -238,5 +220,19 @@ class Addtional_data : AppCompatActivity()
         //Toast.makeText(this, "Seleccionado: ${selectedInstitucion.codigoInstitucion}", Toast.LENGTH_SHORT).show()
 
 
+    }
+
+    fun StartActivityUserType(v: View)
+    {
+        //Indicamos la redireccion al objeto intent
+        val intent = Intent(this, UserType::class.java)
+        intent.putExtra("EXTRA_PROVIDER_ID",providerID)
+        intent.putExtra("EXTRA_EMAIL",email)
+        intent.putExtra("EXTRA_UID",uid)
+        //Iniciamos la actividad
+        startActivity(intent);
+
+        //Cerramos la actividad actual
+        finish()
     }
 }
